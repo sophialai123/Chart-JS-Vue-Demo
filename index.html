@@ -1,0 +1,133 @@
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<!-- https://cdn.jsdelivr.net/npm/chart.js -->
+
+<div id="app">
+  <div>
+    <canvas id="myChart"></canvas>
+  </div>
+</div>
+
+
+<script>
+  const { createApp } = Vue
+  var app = createApp({
+    data() {
+      return {
+        message: 'Hello Vue!'
+      }
+    },
+    methods:{
+      generateChart(){
+        const ctx = document.getElementById('myChart');
+
+        var animation ={
+          onComplete: (x)=>{
+                const chart = x.chart;
+                var { ctx } = chart;
+                ctx.textAlign = 'center';
+                ctx.fillStyle = "rgba(0, 0, 0, 1)";
+                ctx.textBaseline = 'bottom';
+                // Loop through each data in the datasets
+                const metaFunc = this.getDatasetMeta;
+                chart.data.datasets.forEach((dataset, i) => {
+                  var meta = chart.getDatasetMeta(i);
+                  meta.data.forEach((bar, index) => {
+                    var data = dataset.data[index];
+                    var value = typeof data === 'object' ? data.y : data
+                    ctx.fillText(`${value}`, bar.x, bar.y - 5);
+                  });
+                });
+              }
+            }
+
+
+            var Data1 = {
+ label: 'labe1',
+  data: [{x:"ss",y:5}],
+  backgroundColor: '#2862F2',
+  borderColor: 'rgba(99, 132, 0, 1)',
+  yAxisID: "y-axis-gravity"
+}
+var Data2 = {
+ label: 'labe2',
+  data: [{x:"ss",y:6},{x:"ss1",y:6}],
+  backgroundColor: '#00C4DF',
+  borderColor: 'rgba(99, 132, 0, 1)',
+  yAxisID: "y-axis-gravity"
+}
+var Data3 = {
+ label: 'labe3',
+  data: [5,9,7],
+  backgroundColor: '#0CC060',
+  borderColor: 'rgba(99, 132, 0, 1)',
+  yAxisID: "y-axis-gravity"
+}
+
+var planetData = {
+  datasets: [Data1, Data2,Data3]
+};
+ 
+var chartOptions = {
+  scales: {
+    xAxes: [{
+      barPercentage: 1,
+      categoryPercentage: 0.4
+    }],
+    yAxes: [{
+      id: "y-axis-gravity"
+    } 
+    ]
+    }
+};
+        
+        new Chart(ctx, {
+          type: 'bar',
+          data:planetData,
+          options: chartOptions,
+          // data: {
+          //   // datasets: [{
+          //   //   label: 'sss',
+          //   //   data: [{x: 'Sales', y: 20}, {x: 'Revenue', y: 10}],
+          //   //   borderWidth: 1
+          //   // }]
+           
+          // },
+          options: {
+            // layout: {
+            //   padding: 20
+            // },
+            // scales: {
+            //   y: {
+            //     beginAtZero: true,
+              
+            //   }   
+            // },
+            maintainAspectRatio: false,
+            aspectRatio: 0.5,
+            showTooltips: false,
+            tooltipTemplate: "<%= value %>",
+            animation
+          },
+        },
+        );
+      }
+    },
+    props:{},
+    created(){
+      
+    },
+    mounted(){
+      let script = document.createElement('script')
+      script.setAttribute('src', 'https://cdn.jsdelivr.net/npm/chart.js')
+      script.async = false
+      document.head.appendChild(script)
+
+      script.onload= () => {
+        this.generateChart()
+      };        
+    }
+  })
+  app.mount("#app")
+
+  
+</script>
