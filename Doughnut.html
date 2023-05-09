@@ -1,0 +1,108 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div id="app">
+    <div>
+      <canvas id="myChart"></canvas>
+    </div>
+  </div>         
+<script>
+
+    const datapoints = [47, 3, 5, 251, 166, 15];
+
+    function getTotal(array) {
+       
+        let total = 0
+
+        for (let i = 0; i < array.length; i++) {
+            total += array[i];                    
+        }
+
+        return total
+    }
+
+    const bgColor = [
+        '#2862F2',
+        '#00C4DF',
+        '#0CC060',
+        '#6C48D2',
+        '#061848',
+        '#FE5A00',
+        '#D92B27',
+        '#98B5FC',
+        '#B1E1E6',
+        '#98D8B6',
+        '#C3B7E5',
+        '#5E6376',
+        '#D8AC94',
+        '#DBB0B0'
+    ]
+   
+    const data = {
+        labels: ['Direct', 'Internal', 'LinkedIn', 'Manual', 'Public', 'Seek'],
+        datasets: [{
+            label: 'No. of Candidates',
+            data: datapoints,
+            backgroundColor: bgColor,
+            borderRadius: 4,                    
+        }]
+    };
+
+    const counter = {
+        id: 'counter',
+        beforeDraw(chart, args, options){
+            const {ctx, chartArea:{ top, right, bottom, left, width, height}}  = chart
+            ctx.save()
+            ctx.fillStyle = '#000000de'
+            ctx.font = '40px Helvetica'
+            ctx.textAlign = 'center'
+            ctx.textStyle = 'bold'
+            ctx.fillText(getTotal(datapoints), (width/2), top + (height/2) + 5)
+        },
+    };
+
+    const config = {
+        type: 'doughnut',
+        data,
+        options:{
+            plugins:{
+                tooltip: {
+                    // enabled: false,
+                    backgroundColor: '#F7F8FA',
+                    titleColor: '#000',
+                    titleFont: {
+                        weight: 'bold'
+                    },
+                    titleAlign: 'center',
+                    bodyColor: '#000',
+                    displayColors:false,
+                   
+                },
+                legend:{
+                    position:'top',
+                    align: 'start',
+                    labels:{
+                        boxWidth : 12,
+                        font:{
+                            family: 'Centra No2',
+                            size:14,
+                            weight:300,
+                        },
+                    },
+                },
+                title:{
+                    display:true,
+                    text: 'Candidates by Source',
+                    color: '#000000de',
+                    align: 'start',
+                    font:{
+                        family: 'Centra No2',
+                        size:18,
+                    }
+                   
+                }
+            },
+        },
+        plugins:[counter]
+    };
+
+    const myChart = new Chart(document.getElementById('myChart'),config);
+</script>
